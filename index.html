@@ -102,8 +102,8 @@
 
     const bgStyle = {
       minHeight: "100vh",
-      background: "#CC1122",
-      backgroundImage: `radial-gradient(circle, rgba(0,0,0,0.15) 1px, transparent 1px)`,
+      background: "#7a0a00",
+      backgroundImage: `radial-gradient(circle, rgba(0,0,0,0.08) 1px, transparent 1px)`,
       backgroundSize: "18px 18px",
       fontFamily: "'Arial Black', 'Impact', 'Segoe UI Black', system-ui, sans-serif",
       color: "#fff",
@@ -215,6 +215,9 @@
               <button onClick={reset} style={navBtn("#5a0a0a", "#f87171")}>Reset</button>
             </div>
           </div>
+
+          {/* Transition strip */}
+          <div style={{ height: 22, background: "linear-gradient(to bottom, #1B2A6B, #7a0a00)", width: "100%" }} />
 
           {/* Rules */}
           {showRules && (
