@@ -22,7 +22,9 @@
 
     // --- Puzzle loader ---
     // Leading underscore = loader-only variables; do not reference below this block.
-    const _today = new Date().toLocaleDateString('en-CA'); // "YYYY-MM-DD" local timezone
+    const _todayReal = new Date().toLocaleDateString('en-CA'); // "YYYY-MM-DD" local timezone
+    const _dateParam = new URLSearchParams(window.location.search).get('date');
+    const _today = _dateParam || _todayReal;
 
     let _puzzle = null;
     if (typeof PUZZLES !== 'undefined' && Object.keys(PUZZLES).length > 0) {
