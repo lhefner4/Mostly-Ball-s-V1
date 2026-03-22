@@ -189,6 +189,7 @@
       const gridCols = "106px 1fr 1fr 1fr 1fr";
       const hasRevealable = incorrect > 0 || (TOTAL_TILES - totalPlayed) > 0;
 
+      // Safe: _puzzle is a module-level constant; all hooks above always execute the same way.
       if (!_puzzle) return <div style={{ color: '#fff', textAlign: 'center', padding: 40, fontFamily: 'sans-serif', fontSize: 20 }}>Game unavailable — check back soon.</div>;
 
       return (
