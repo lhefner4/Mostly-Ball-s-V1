@@ -175,7 +175,7 @@
 
       const handleCopyResults = () => {
         const pct = Math.round((correct / TOTAL_TILES) * 100);
-        const msg = `I shot ${correct} / ${TOTAL_TILES} (${pct}% Correct)... Balls in your court now! \uD83C\uDFC0\n${GAME_URL} \uD83C\uDFC0`;
+        const msg = `${GRID_LABEL}\nI shot ${correct} / ${TOTAL_TILES} (${pct}% Correct) — Balls in your court now!\n\n${GAME_URL}`;
         if (navigator.clipboard) {
           navigator.clipboard.writeText(msg).catch(() => { const ta = document.createElement('textarea'); ta.value = msg; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); });
         } else { const ta = document.createElement('textarea'); ta.value = msg; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); }
