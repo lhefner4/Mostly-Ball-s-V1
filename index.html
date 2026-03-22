@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Mostly Immaculate Grid — Do You Know Ball?</title>
+  <script src="players.js"></script>
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -55,7 +56,7 @@
     const GAME_URL = "https://lhefner4.github.io/Mostly-Ball-s-V1/";
     const nc = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
 
-    const ALL_PLAYERS = [...new Set(Object.values(ANSWER_POOL).flat())].sort((a,b) => a.localeCompare(b));
+    const ALL_PLAYERS = typeof PLAYER_DB !== 'undefined' ? PLAYER_DB : [...new Set(Object.values(ANSWER_POOL).flat())].sort((a,b) => a.localeCompare(b));
 
     const buildRevealMap = (cells) => {
       const assigned = new Set();
@@ -203,18 +204,18 @@
 
           {/* HEADER */}
           <div style={{ background: "#1B2A6B", borderBottom: "6px solid #FFD700", padding: "20px 16px 18px", textAlign: "center", boxShadow: "0 4px 24px rgba(0,0,0,0.4)", backgroundImage: "radial-gradient(ellipse 55% 90% at 50% 50%, rgba(27,42,107,0.97) 0%, rgba(27,42,107,0.92) 35%, rgba(27,42,107,0.55) 60%, rgba(27,42,107,0.15) 80%, rgba(27,42,107,0.0) 100%), url('retro-composite.png')", backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}>
-            <div style={{ display: "inline-block", background: "#F5F0E0", color: "#1B2A6B", fontSize: 10, fontWeight: 900, letterSpacing: 3, textTransform: "uppercase", padding: "4px 18px", borderRadius: 3, marginBottom: 12, boxShadow: "0 2px 6px rgba(0,0,0,0.3)", transform: "rotate(-1deg)" }}>
-              WEEK 1: THIS IS MARCH!
+            <div style={{ display: "inline-block", background: "#F5F0E0", color: "#1B2A6B", fontSize: 11, fontWeight: 1000, letterSpacing: 3, textTransform: "uppercase", padding: "4px 18px", borderRadius: 3, marginBottom: 12, boxShadow: "0 2px 6px rgba(0,0,0,0.3)", transform: "rotate(-1deg)" }}>
+              WEEK 1: THIS IS MARCH
             </div>
             <div style={{ marginBottom: 4 }}>
               <div style={{ fontSize: "clamp(28px,7vw,54px)", fontWeight: 900, lineHeight: 1, textTransform: "uppercase", letterSpacing: -1, color: "#fff", textShadow: "4px 4px 0px #CC1122, 6px 6px 0px rgba(0,0,0,0.3)" }}>THE MOSTLY</div>
               <div style={{ fontSize: "clamp(28px,7vw,54px)", fontWeight: 900, lineHeight: 1, textTransform: "uppercase", letterSpacing: -1, color: "#FFD700", textShadow: "4px 4px 0px #CC1122, 6px 6px 0px rgba(0,0,0,0.4)" }}>IMMACULATE GRID</div>
             </div>
-            <div style={{ display: "inline-block", background: "#CC1122", color: "#fff", fontSize: "clamp(11px,2.8vw,16px)", fontWeight: 900, letterSpacing: 3, textTransform: "uppercase", padding: "5px 20px", borderRadius: 3, marginTop: 10, marginBottom: 14, border: "2px solid #FFD700", boxShadow: "3px 3px 0px rgba(0,0,0,0.3)" }}>
-              Do You Know Ball? 🏀
+            <div style={{ display: "inline-block", background: "#CC1122", color: "#fff", fontSize: "clamp(11px,2.8vw,16px)", fontWeight: 900, letterSpacing: 3, textTransform: "uppercase", padding: "5px 20px", borderRadius: 3, marginTop: 10, marginBottom: 14, border: "2px solid #FFD700", textShadow: "-1px -1px 0 #1B2A6B, 1px -1px 0 #1B2A6B, -1px 1px 0 #1B2A6B, 1px 1px 0 #1B2A6B", boxShadow: "3px 3px 0px rgba(0,0,0,0.3)" }}>
+              BLUE BLOOD BALLERS
             </div>
             <div style={{ fontSize: 10, color: "rgba(255,255,255,0.5)", letterSpacing: 2, marginBottom: 14, fontFamily: "'Arial', sans-serif" }}>
-              ONE GUESS PER TILE &nbsp;•&nbsp; EACH PLAYER USED ONCE
+              Sign-In &nbsp;•&nbsp; Sign-Up &nbsp;•&nbsp; View Leaderboards
             </div>
             <div style={{ display: "flex", justifyContent: "center", alignItems: "stretch", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>
               {[
