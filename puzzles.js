@@ -50,7 +50,7 @@ const PUZZLES = {
       { name: "Indiana",        nickname: "Hoosiers", color: "#990000", border: "#cc3333" },
     ],
     rows: [
-      { name: "Ball Screen",        desc: "Appeared on the Sports Illustrated cover in college" },
+      { name: "Ball Screen",        desc: "Set the screen, made the cover — appeared on Sports Illustrated during their college career" },
       { name: "Ball in the Family", desc: "Has a brother who also played D1 college basketball" },
       { name: "High Ball",          desc: "Was a top-5 NBA Draft pick" },
       { name: "Jump Ball",          desc: "Led this team in rebounds during a Tournament run" },
