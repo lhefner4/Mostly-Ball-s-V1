@@ -254,6 +254,17 @@
         saveNickname(val);
       };
 
+      const handlePopoverSave = () => {
+        const val = popoverInput.trim();
+        if (!validateNickname(val)) {
+          setPopoverError('2–20 characters. Letters, numbers, _ and - only.');
+          return;
+        }
+        saveNickname(val);
+        setShowPopover(false);
+        setPopoverError('');
+      };
+
       const activeInfo = active
         ? (() => { const [r, c] = active.split("-").map(Number); return { row: ROWS[r], col: COLUMNS[c] }; })()
         : null;
@@ -317,8 +328,55 @@
             <div style={{ display: "inline-block", background: "#CC1122", color: "#fff", fontSize: "clamp(11px,2.8vw,16px)", fontWeight: 900, letterSpacing: 3, textTransform: "uppercase", padding: "5px 20px", borderRadius: 3, marginTop: 10, marginBottom: 14, border: "2px solid #FFD700", textShadow: "-1px -1px 0 #1B2A6B, 1px -1px 0 #1B2A6B, -1px 1px 0 #1B2A6B, 1px 1px 0 #1B2A6B", boxShadow: "3px 3px 0px rgba(0,0,0,0.3)" }}>
               {GRID_LABEL}
             </div>
-            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.5)", letterSpacing: 2, marginBottom: 14, fontFamily: "'Arial', sans-serif" }}>
-              Sign-In &nbsp;•&nbsp; Sign-Up &nbsp;•&nbsp; View Leaderboards
+            <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,212,0,0.12)', border: '1px solid rgba(255,212,0,0.35)', borderRadius: 20, padding: '4px 10px 4px 12px', marginBottom: 14, cursor: 'default' }}>
+              <span style={{ fontSize: 12, color: '#FFD700', fontFamily: "'Arial', sans-serif", fontWeight: 700, letterSpacing: 0.5 }}>
+                {nickname}
+              </span>
+              <button
+                onClick={() => { setShowPopover(p => !p); setPopoverInput(nickname); setPopoverError(''); }}
+                aria-label="Change nickname"
+                aria-expanded={showPopover}
+                style={{ background: 'none', border: 'none', color: 'rgba(255,212,0,0.6)', cursor: 'pointer', fontSize: 13, padding: '0 2px', lineHeight: 1 }}>
+                ⚙
+              </button>
+
+              {showPopover && (
+                <>
+                  {/* Invisible backdrop to catch click-away */}
+                  <div
+                    onClick={() => setShowPopover(false)}
+                    style={{ position: 'fixed', inset: 0, zIndex: 99 }}
+                  />
+                  {/* Popover card */}
+                  <div
+                    role="dialog"
+                    aria-label="Change nickname"
+                    style={{ position: 'absolute', top: 'calc(100% + 8px)', left: '50%', transform: 'translateX(-50%)', background: '#1B2A6B', border: '2px solid #FFD700', borderRadius: 10, padding: '16px', zIndex: 100, minWidth: 220, boxShadow: '0 6px 24px rgba(0,0,0,0.5)', textAlign: 'left' }}>
+                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', fontFamily: "'Arial', sans-serif", marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 }}>
+                      Change Nickname
+                    </div>
+                    <input
+                      type="text"
+                      maxLength={20}
+                      value={popoverInput}
+                      onChange={(e) => setPopoverInput(e.target.value)}
+                      onKeyDown={(e) => { if (e.key === 'Enter') handlePopoverSave(); }}
+                      style={{ width: '100%', padding: '8px 10px', borderRadius: 5, border: '2px solid #FFD700', background: '#0d1a4a', color: '#fff', fontSize: 14, fontFamily: "'Arial', sans-serif", outline: 'none', boxSizing: 'border-box', marginBottom: 6 }}
+                      autoFocus
+                    />
+                    {popoverError && (
+                      <div style={{ color: '#CC1122', fontSize: 11, fontFamily: "'Arial', sans-serif", marginBottom: 8 }}>
+                        {popoverError}
+                      </div>
+                    )}
+                    <button
+                      onClick={handlePopoverSave}
+                      style={{ width: '100%', padding: '8px 0', borderRadius: 6, background: '#FFD700', border: 'none', color: '#1B2A6B', fontWeight: 900, cursor: 'pointer', fontSize: 12, textTransform: 'uppercase', letterSpacing: 1, fontFamily: "'Arial Black', sans-serif" }}>
+                      Save
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
             <div style={{ display: "flex", justifyContent: "center", alignItems: "stretch", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>
               {[
