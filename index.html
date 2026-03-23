@@ -345,14 +345,14 @@
                   {/* Invisible backdrop to catch click-away */}
                   <div
                     onClick={() => setShowPopover(false)}
-                    style={{ position: 'fixed', inset: 0, zIndex: 199, cursor: 'default' }}
+                    style={{ position: 'fixed', inset: 0, zIndex: 149, cursor: 'default' }}
                   />
                   {/* Popover card */}
                   <div
                     role="dialog"
                     aria-modal="true"
                     aria-label="Change nickname"
-                    style={{ position: 'absolute', top: 'calc(100% + 8px)', left: '50%', transform: 'translateX(-50%)', background: '#1B2A6B', border: '2px solid #FFD700', borderRadius: 10, padding: '16px', zIndex: 200, minWidth: 220, boxShadow: '0 6px 24px rgba(0,0,0,0.5)', textAlign: 'left' }}>
+                    style={{ position: 'absolute', top: 'calc(100% + 8px)', left: '50%', transform: 'translateX(-50%)', background: '#1B2A6B', border: '2px solid #FFD700', borderRadius: 10, padding: '16px', zIndex: 150, minWidth: 220, boxShadow: '0 6px 24px rgba(0,0,0,0.5)', textAlign: 'left' }}>
                     <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', fontFamily: "'Arial', sans-serif", marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 }}>
                       Change Nickname
                     </div>
