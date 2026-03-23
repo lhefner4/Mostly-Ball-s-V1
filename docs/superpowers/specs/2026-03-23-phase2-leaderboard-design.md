@@ -33,18 +33,39 @@ CREATE TABLE scores (
   player_token  UUID        NOT NULL,
   player_name   TEXT        NOT NULL,
   correct       SMALLINT    NOT NULL CHECK (correct >= 0 AND correct <= 16),
-  puzzle_date   DATE        NOT NULL DEFAULT CURRENT_DATE,
+  puzzle_date   DATE        NOT NULL,
   submitted_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   CONSTRAINT unique_player_per_day UNIQUE (player_token, puzzle_date)
 );
 ```
 
+Note: `puzzle_date` has no server-side default — it is always passed explicitly from the client using the resolved `_today` value (see Score Submission Flow). This ensures the correct puzzle date is used even when the server's timezone differs from the player's local date.
+
 ### Row Level Security
 
-RLS must be enabled. Three policies on the anon key:
-- **INSERT**: allowed — any user can submit a score
-- **SELECT**: allowed — anyone can read leaderboard entries
-- **UPDATE / DELETE**: denied — no modifications after submission
+RLS must be enabled on the `scores` table. The following four policies apply to the `anon` role:
+
+```sql
+-- Allow any user to submit a score
+CREATE POLICY "allow_insert" ON scores
+  FOR INSERT TO anon
+  WITH CHECK (true);
+
+-- Allow anyone to read the leaderboard
+CREATE POLICY "allow_select" ON scores
+  FOR SELECT TO anon
+  USING (true);
+
+-- Deny updates
+CREATE POLICY "deny_update" ON scores
+  FOR UPDATE TO anon
+  USING (false);
+
+-- Deny deletes
+CREATE POLICY "deny_delete" ON scores
+  FOR DELETE TO anon
+  USING (false);
+```
 
 ### Index
 
@@ -68,44 +89,64 @@ const SUPABASE_ANON_KEY = 'your-anon-key';
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 ```
 
-### `submitScore(token, name, correct)`
+### `submitScore(token, name, correct, puzzleDate)`
 
-Standalone async function. Called once when the game ends. Uses `upsert` with `onConflict: 'player_token,puzzle_date'` and `ignoreDuplicates: true` — if the same player submits twice on the same day, the first score stands and the second call is silently ignored. All errors are swallowed silently — submission failure does not affect game flow.
+Standalone async function. Called once when the game ends. `puzzleDate` is the resolved `_today` value already computed at the top of the script (accounts for URL param overrides). Uses `upsert` with `onConflict: 'player_token,puzzle_date'` and `ignoreDuplicates: true` — if the same player submits twice on the same day, the first score stands and the second call is silently ignored. All errors are swallowed silently — submission failure does not affect game flow.
 
 ```js
-async function submitScore(token, name, correct) {
+async function submitScore(token, name, correct, puzzleDate) {
   try {
     await supabaseClient
       .from('scores')
-      .upsert({ player_token: token, player_name: name, correct },
-               { onConflict: 'player_token,puzzle_date', ignoreDuplicates: true });
+      .upsert(
+        { player_token: token, player_name: name, correct, puzzle_date: puzzleDate },
+        { onConflict: 'player_token,puzzle_date', ignoreDuplicates: true }
+      );
   } catch (e) { /* silent */ }
 }
 ```
 
-### `useLeaderboard(puzzleDate, playerToken)`
+### `useLeaderboard(puzzleDate, playerToken, refreshKey)`
 
-React hook. Fetches today's scores sorted by `correct DESC`, limited to top 100. Returns:
+React hook. `refreshKey` is a numeric counter; incrementing it triggers a re-fetch. Fetches today's scores sorted by `correct DESC`, limited to top 100. Returns:
 
 ```js
-{ entries: [{ player_name, correct, rank }], totalCount, playerRank, loading }
+{ entries: [{ player_name, correct, rank }], totalCount, playerRank, loading, error }
 ```
 
+- `entries`: array of top scores; `rank` is assigned sequentially (1, 2, 3…) in sort order — ties are not collapsed
 - `playerRank`: the current player's rank (1-based), or `null` if their token isn't in the results
 - `totalCount`: total number of players who submitted today (shown as "N players")
 - `loading`: boolean, true while fetching
-- Called at the top of the main component alongside `usePlayerIdentity()`
-- Fetches on mount and after score submission completes
+- `error`: boolean, true if the fetch failed — the component hides the leaderboard section when `error` is true
+
+The hook runs a `useEffect` on `[puzzleDate, refreshKey]`. When `refreshKey` changes, the effect re-runs and re-fetches. It does not re-fetch on modal open/close.
+
+**Rendering rules for the leaderboard section:**
+- `loading && !error`: show spinner
+- `!loading && error`: hide section entirely (no error message shown)
+- `!loading && !error && entries.length === 0`: show "No scores yet today"
+- `!loading && !error && entries.length > 0`: show leaderboard table
 
 ---
 
 ## Score Submission Flow
 
-1. Game end is detected by existing logic (all tiles played or no guesses remaining)
-2. `submitScore(token, nickname, correct)` is called automatically — no player action required
-3. After submission resolves (success or silent failure), `useLeaderboard` re-fetches to pick up the new entry
-4. End-game modal renders with leaderboard data
-5. If submission fails silently, leaderboard still shows (player just won't appear in it)
+Game end is detected by an existing `useEffect` that watches `totalPlayed === TOTAL_TILES`. The submission is wired into that same effect. No separate "game-end handler" exists — submission is added to the existing effect:
+
+```js
+useEffect(() => {
+  if (totalPlayed === TOTAL_TILES) {
+    submitScore(token, nickname, correct, _today); // new line
+    setTimeout(() => setShowEndGame(true), 600);   // existing line
+    setRefreshKey(k => k + 1);                     // new line — triggers leaderboard re-fetch
+  }
+}, [totalPlayed]);
+```
+
+`token` must be added to the destructured return of `usePlayerIdentity()` in the `App` component (currently only `nickname`, `showModal`, and `saveNickname` are destructured). `_today` is the resolved puzzle date constant already available at the top of the script block.
+
+`setRefreshKey` increments the `refreshKey` state variable (initialized to `0`), which is passed to `useLeaderboard` and triggers a re-fetch after submission. This is the only mechanism that triggers a re-fetch — the hook does not re-fetch on modal open/close.
 
 ---
 
@@ -123,7 +164,7 @@ Clicking `🏆` opens the standalone leaderboard modal (see below).
 
 ### Standalone Leaderboard Modal
 
-Opens when the trophy button is clicked during play (before game ends). Full-viewport backdrop, centered navy card — same pattern as the nickname modal. Shows today's leaderboard in the same scrollable format as the end-game modal. Includes a player count ("247 players"). Player's own entry is highlighted. Closeable via backdrop click or Escape key.
+Opens when the trophy button is clicked during play (before game ends). Full-viewport backdrop, centered navy card — same pattern as the nickname modal. **z-index: 300** (above the end-game modal at 200, below the site notice popup at 1000). Shows today's leaderboard in the same scrollable format as the end-game modal. Includes a player count ("247 players"). Player's own entry is highlighted. Closeable via backdrop click or Escape key.
 
 ### End-Game Modal (Extended)
 
@@ -151,8 +192,9 @@ The existing end-game results modal is extended with a leaderboard section below
 - Max height with `overflow-y: auto` so the modal doesn't grow unbounded
 - Player's own row is highlighted (gold-tinted background, "YOU" badge)
 - Shows player count in subtitle
-- Loading state: spinner/skeleton while fetching
-- If leaderboard fetch fails: section is hidden (no error shown to player)
+- Loading state: spinner shown while fetching
+- If leaderboard fetch fails (`error === true`): section is hidden entirely, no error shown to player
+- If no scores yet (`entries.length === 0`): shows "No scores yet today"
 
 ---
 
@@ -164,14 +206,16 @@ The existing end-game results modal is extended with a leaderboard section below
 | `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `supabaseClient` | Top of script block, constants section | New addition |
 | `submitScore()` function | Script block, after hook definitions | New addition |
 | `useLeaderboard()` hook | Script block, after `usePlayerIdentity` | New addition |
-| Hook call + destructuring | Top of main component | New addition |
-| `submitScore()` call | Existing game-end handler | Minimal modification |
+| `token` added to `usePlayerIdentity()` destructuring | Top of `App` component | Minimal modification |
+| `refreshKey` state + `setRefreshKey` | Top of `App` component state | New addition |
+| `useLeaderboard(puzzleDate, token, refreshKey)` call | Top of `App` component | New addition |
+| `submitScore()` + `setRefreshKey` call | Existing `useEffect` watching `totalPlayed` | Minimal modification |
 | Trophy button `🏆` | Header, right of nickname pill | New addition |
-| `showLeaderboard` state | Main component state | New addition |
-| Standalone leaderboard modal | Main component return | New addition |
+| `showLeaderboard` state | `App` component state | New addition |
+| Standalone leaderboard modal (z-index 300) | `App` component return | New addition |
 | End-game modal leaderboard section | Existing end-game modal | Extension |
 
-**Nothing else in the game is modified.** No core game logic, no scoring system, no existing state.
+**Nothing else in the game is modified.** No core game logic, no scoring system, no existing state beyond additions above.
 
 ---
 
@@ -181,8 +225,9 @@ The existing end-game results modal is extended with a leaderboard section below
 |---|---|
 | Score submission fails (network) | Silent — game unaffected, player won't appear on leaderboard |
 | Score submitted twice same day | Silent — first score stands (upsert ignoreDuplicates) |
-| Leaderboard fetch fails | Section hidden in modal; no error shown |
-| Leaderboard loading | Spinner/skeleton shown while fetching |
+| Leaderboard fetch fails | `error = true` — section hidden in modal; no error shown |
+| Leaderboard loading | `loading = true` — spinner shown |
+| No scores yet today | `entries.length === 0` — "No scores yet today" shown |
 | Supabase completely down | Game functions normally; leaderboard section absent |
 
 ---
@@ -190,16 +235,20 @@ The existing end-game results modal is extended with a leaderboard section below
 ## Acceptance Criteria
 
 - [ ] Score is automatically submitted at game end with no player action required
+- [ ] `puzzle_date` is passed explicitly from the client (not derived from server `CURRENT_DATE`)
 - [ ] Submitting the same player_token twice on the same day results in one entry (first score wins)
 - [ ] Score submission failure is silent — game flow unaffected
+- [ ] Leaderboard re-fetches after submission via `refreshKey` increment
 - [ ] End-game modal shows a scrollable leaderboard with player count below Copy Results button
-- [ ] Player's own row is visually highlighted with rank position
+- [ ] Player's own row is visually highlighted with rank position and "YOU" badge
 - [ ] Trophy button `🏆` in header opens a standalone leaderboard modal at any time
 - [ ] Standalone leaderboard modal is closeable via backdrop click or Escape key
+- [ ] Standalone leaderboard modal has z-index 300 (above end-game modal, below site notice)
 - [ ] Leaderboard shows today's scores only (resets daily)
 - [ ] Player count ("N players") is shown
-- [ ] Loading state shown while leaderboard fetches
+- [ ] Loading state (spinner) shown while leaderboard fetches
 - [ ] If leaderboard fetch fails, section is hidden — no error shown
+- [ ] If no scores yet today, "No scores yet today" is shown
 - [ ] No existing game functionality is broken
 - [ ] All new code lives in `index.html` — no new files
 
