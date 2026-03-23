@@ -202,7 +202,7 @@
     }
 
     function App() {
-      const { nickname, showModal, saveNickname } = usePlayerIdentity();
+      const { token, nickname, showModal, saveNickname } = usePlayerIdentity();
       const [showPopover, setShowPopover] = useState(false);
       const [modalInput, setModalInput] = useState('');
       const [modalError, setModalError] = useState('');
@@ -223,6 +223,8 @@
       const [showNotice, setShowNotice] = useState(
         typeof SITE_NOTICE === 'string' && SITE_NOTICE.length > 0
       );
+      const [refreshKey, setRefreshKey] = useState(0);
+      const { entries, totalCount, playerRank, loading: lbLoading, error: lbError } = useLeaderboard(_today, token, refreshKey);
       const inputRef = useRef(null);
       const dropdownRef = useRef(null);
 
@@ -231,7 +233,11 @@
       const totalPlayed = correct + incorrect;
 
       useEffect(() => {
-        if (totalPlayed === TOTAL_TILES) setTimeout(() => setShowEndGame(true), 600);
+        if (totalPlayed === TOTAL_TILES) {
+          submitScore(token, nickname, correct, _today);
+          setTimeout(() => setShowEndGame(true), 600);
+          setRefreshKey(k => k + 1);
+        }
       }, [totalPlayed]);
 
       useEffect(() => {
