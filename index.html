@@ -335,7 +335,7 @@
               <button
                 onClick={() => { setShowPopover(p => !p); setPopoverInput(nickname); setPopoverError(''); }}
                 aria-label="Change nickname"
-                aria-expanded={showPopover}
+                aria-expanded={showPopover ? 'true' : 'false'}
                 style={{ background: 'none', border: 'none', color: 'rgba(255,212,0,0.6)', cursor: 'pointer', fontSize: 13, padding: '0 2px', lineHeight: 1 }}>
                 ⚙
               </button>
@@ -345,13 +345,14 @@
                   {/* Invisible backdrop to catch click-away */}
                   <div
                     onClick={() => setShowPopover(false)}
-                    style={{ position: 'fixed', inset: 0, zIndex: 99 }}
+                    style={{ position: 'fixed', inset: 0, zIndex: 199, cursor: 'default' }}
                   />
                   {/* Popover card */}
                   <div
                     role="dialog"
+                    aria-modal="true"
                     aria-label="Change nickname"
-                    style={{ position: 'absolute', top: 'calc(100% + 8px)', left: '50%', transform: 'translateX(-50%)', background: '#1B2A6B', border: '2px solid #FFD700', borderRadius: 10, padding: '16px', zIndex: 100, minWidth: 220, boxShadow: '0 6px 24px rgba(0,0,0,0.5)', textAlign: 'left' }}>
+                    style={{ position: 'absolute', top: 'calc(100% + 8px)', left: '50%', transform: 'translateX(-50%)', background: '#1B2A6B', border: '2px solid #FFD700', borderRadius: 10, padding: '16px', zIndex: 200, minWidth: 220, boxShadow: '0 6px 24px rgba(0,0,0,0.5)', textAlign: 'left' }}>
                     <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', fontFamily: "'Arial', sans-serif", marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 }}>
                       Change Nickname
                     </div>
@@ -360,7 +361,7 @@
                       maxLength={20}
                       value={popoverInput}
                       onChange={(e) => setPopoverInput(e.target.value)}
-                      onKeyDown={(e) => { if (e.key === 'Enter') handlePopoverSave(); }}
+                      onKeyDown={(e) => { if (e.key === 'Enter') handlePopoverSave(); if (e.key === 'Escape') setShowPopover(false); }}
                       style={{ width: '100%', padding: '8px 10px', borderRadius: 5, border: '2px solid #FFD700', background: '#0d1a4a', color: '#fff', fontSize: 14, fontFamily: "'Arial', sans-serif", outline: 'none', boxSizing: 'border-box', marginBottom: 6 }}
                       autoFocus
                     />
