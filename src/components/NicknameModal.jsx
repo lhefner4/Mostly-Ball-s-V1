@@ -19,7 +19,7 @@ export default function NicknameModal({ modalInput, setModalInput, modalError, o
             value={modalInput}
             onChange={(e) => setModalInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter') onSubmit() }}
-            style={{ width: '100%', padding: '10px 14px', borderRadius: 6, border: '2px solid #FFD700', background: '#0d1a4a', color: '#fff', fontSize: 15, fontFamily: "'Arial', sans-serif", outline: 'none', boxSizing: 'border-box', marginBottom: 8 }}
+            style={{ width: '100%', padding: '10px 14px', borderRadius: 6, border: '2px solid #FFD700', background: '#0d1a4a', color: '#fff', fontSize: 15, fontFamily: "'Arial', sans-serif", outline: 'none', boxSizing: 'border-box', marginBottom: 8, textAlign: 'center' }}
             autoFocus
           />
           {modalError && (
