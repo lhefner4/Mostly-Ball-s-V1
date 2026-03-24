@@ -2,7 +2,7 @@
 // To add a new day: add a new "YYYY-MM-DD" entry and push to GitHub.
 // weekBadge: plain text, ~30 chars max. gridLabel: plain text, ~35 chars max.
 // ACTIVE_OVERRIDE: set to a "YYYY-MM-DD" string to force that puzzle live for everyone. Set to null to resume normal date-based loading.
-export const ACTIVE_OVERRIDE = "2026-03-23";
+export const ACTIVE_OVERRIDE = "2026-03-24";
 export const SITE_NOTICE = "Warning: This is an active prototype. Log-in, Sign-up and Leaderboard features are currently disabled. -THANKS FOR TESTING!";
 export const PUZZLES = {
   "2026-03-22": {
