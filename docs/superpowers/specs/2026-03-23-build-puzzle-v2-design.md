@@ -102,6 +102,8 @@ Action:
 - Options: (A) swap the team and re-research only that column's 4 cells, (B) continue anyway
 - The other 3 columns' results are preserved regardless
 
+**Priority when both rules fire simultaneously:** Handle Rule 1 (broken category) first. After the user resolves it and re-research completes, re-run the full viability gate before checking Rule 2. This ensures the column re-check reflects any changes from the category swap.
+
 **Healthy grid:** No viability issues found → proceed directly to Phase 3 with no user interaction.
 
 ---
