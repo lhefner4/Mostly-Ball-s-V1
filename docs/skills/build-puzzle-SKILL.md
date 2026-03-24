@@ -6,24 +6,24 @@ description: >
   set up tomorrow's game, build a grid, or says things like "I'm ready to
   build tomorrow's puzzle", "let's make a new puzzle", "set up the next grid",
   or "build-puzzle". Runs a 5-phase workflow: concept conversation, parallel
-  research agents, flagged review, final approval, then writes to puzzles.js
-  and commits.
+  research agents, flagged review, final approval, then writes to
+  src/data/puzzles.js and commits.
 ---
 
 # Build Puzzle Workflow
 
-You are helping the creator of "Do You Know Ball?" build a new daily puzzle entry for `puzzles.js`. This file powers the game at https://lhefner4.github.io/Mostly-Ball-s-V1/
+You are helping the creator of "Do You Know Ball?" build a new daily puzzle entry for `src/data/puzzles.js`. This file powers the game at https://lhefner4.github.io/Mostly-Ball-s-V1/
 
 Follow the 5 phases below exactly, in order.
 
 **Project location:** `/home/lucasmhefner/MOSTLY BALL/`
-**Puzzle data file:** `/home/lucasmhefner/MOSTLY BALL/puzzles.js`
+**Puzzle data file:** `/home/lucasmhefner/MOSTLY BALL/src/data/puzzles.js`
 
 ---
 
 ## Setup
 
-Before asking any questions, silently read `/home/lucasmhefner/MOSTLY BALL/puzzles.js` to understand the current puzzle schedule. Note:
+Before asking any questions, silently read `/home/lucasmhefner/MOSTLY BALL/src/data/puzzles.js` to understand the current puzzle schedule. Note:
 - All existing date keys (to avoid creating duplicates)
 - The most recent date key and its `weekBadge` value (needed in Phase 1, Q2)
 
@@ -42,7 +42,7 @@ Resolve the answer to a `YYYY-MM-DD` string:
 - A weekday name → nearest upcoming date for that day
 - A specific date → use as-is
 
-Store as `puzzleDate`. Warn the user if this date already exists in `puzzles.js`.
+Store as `puzzleDate`. Warn the user if this date already exists in `src/data/puzzles.js`.
 
 ### Q2: Week Badge
 
@@ -195,7 +195,7 @@ For any cell with zero players:
 Options:
   A) Provide player names yourself
   B) Change this category (I'll re-research)
-  C) Keep empty — written as `[]` in answerPool. This is a pre-confirmed contract: `validate()` in `index.html` line 71 checks `pool.length === 0` and returns `{ reason: "empty" }`, which the game renders as "⏳ Answer pool coming soon!" — no further verification needed.
+  C) Keep empty — written as `[]` in answerPool. This is a pre-confirmed contract: `validate()` in `src/utils/validate.js` checks `pool.length === 0` and returns `{ reason: "empty" }`, which the game renders as "⏳ Answer pool coming soon!" — no further verification needed.
 ```
 
 - **A:** User provides names → add to that cell's array
@@ -264,11 +264,11 @@ Fold results in, show updated entry. Repeat until user approves.
 
 ## Phase 5: Write and Commit
 
-### Step 1: Write to puzzles.js
+### Step 1: Write to src/data/puzzles.js
 
-Read `/home/lucasmhefner/MOSTLY BALL/puzzles.js` as text. Insert the new entry using **text manipulation only** (no JSON parsing):
+Read `/home/lucasmhefner/MOSTLY BALL/src/data/puzzles.js` as text. Insert the new entry using **text manipulation only** (no JSON parsing):
 
-1. Find the line containing exactly `};` with **no leading whitespace** — this is the unique closing line of the top-level `PUZZLES` const. (All entry closers use `  },` with 2-space indent.)
+1. Find the line containing exactly `};` with **no leading whitespace** — this is the unique closing line of `export const PUZZLES = { ... }`. (All entry closers use `  },` with 2-space indent.)
 2. Find the last non-blank line before `};`. If it ends with `}` only (no comma), add a trailing comma to make it `},`.
 3. Insert the new entry — indented 2 spaces throughout, ending with `  },` — immediately before the `};` line.
 
@@ -278,7 +278,7 @@ Write the modified content back to the file.
 
 ```bash
 cd "/home/lucasmhefner/MOSTLY BALL"
-git add puzzles.js
+git add src/data/puzzles.js
 git commit -m "Add puzzle for [puzzleDate]: [gridLabel]"
 ```
 
