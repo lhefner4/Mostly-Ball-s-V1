@@ -57,6 +57,9 @@ export default function Header({
           {["Click any open tile to enter a player's name", "Player must satisfy both the column team and the row category", "One guess per tile — wrong answer locks it red permanently", "Each player can only be used once across the whole board"].map((t, i) => (
             <div key={i} style={{ color: "#ccc" }}>• {t}</div>
           ))}
+          <div style={{ marginTop: 10, borderTop: "1px solid rgba(255,215,0,0.3)", paddingTop: 10, color: "#FFD700", fontWeight: 700, fontSize: 12 }}>
+            Each tile has a minimum of 3 possible correct answers.
+          </div>
           <div style={{ marginTop: 10, borderTop: "1px solid rgba(255,215,0,0.3)", paddingTop: 10 }}>
             {rows.map((r, i) => <div key={i} style={{ color: "#ccc" }}><strong style={{ color: "#FFD700" }}>{r.name}</strong> — {r.desc}</div>)}
           </div>
