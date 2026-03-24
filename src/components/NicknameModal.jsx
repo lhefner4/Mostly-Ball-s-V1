@@ -5,11 +5,10 @@ export default function NicknameModal({ modalInput, setModalInput, modalError, o
       <div style={{ maxWidth: 360, width: '90%', textAlign: 'center' }}>
         <div style={{ background: '#1B2A6B', border: '3px solid #FFD700', borderRadius: 12, padding: '28px 24px 22px', boxShadow: '0 8px 32px rgba(0,0,0,0.6)' }}>
           <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.82)', fontFamily: "'Arial', sans-serif", lineHeight: 1.65, marginBottom: 24 }}>
-            Welcome to the{' '}
             <strong style={{ color: '#CC1122', fontFamily: "'Arial Black', sans-serif", textTransform: 'uppercase', letterSpacing: '0.5px' }}>
               Mostly Immaculate Grid
             </strong>
-            {' '}— a daily trivia game for real ball knowers. Each week brings a new theme built around what's happening in sports right now.
+            {' '}— a daily updated trivia game where each week brings a fresh theme inspired by the world of sports. Time to see if you really know ball.
           </div>
           <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', fontFamily: "'Arial', sans-serif", marginBottom: 6, letterSpacing: '0.5px' }}>
             Join the leaderboard & track your stats
