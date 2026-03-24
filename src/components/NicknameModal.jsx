@@ -6,7 +6,7 @@ export default function NicknameModal({ modalInput, setModalInput, modalError, o
         <div style={{ background: '#1B2A6B', border: '3px solid #FFD700', borderRadius: 12, padding: '28px 24px 22px', boxShadow: '0 8px 32px rgba(0,0,0,0.6)' }}>
           <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.82)', fontFamily: "'Arial', sans-serif", lineHeight: 1.65, marginBottom: 24 }}>
             <strong style={{ color: '#CC1122', fontFamily: "'Arial Black', sans-serif", textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-              Mostly Immaculate Grid
+              The Mostly Immaculate Grid
             </strong>
             {' '}— a daily updated trivia game where each week brings a fresh theme inspired by the world of sports. Time to see if you really know ball.
           </div>
