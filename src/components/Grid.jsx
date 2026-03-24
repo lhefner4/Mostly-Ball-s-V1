@@ -22,7 +22,7 @@ export default function Grid({
       <div style={{ maxWidth: 680, margin: "12px auto 0", padding: "0 8px" }}>
         <div style={{ display: "grid", gridTemplateColumns: gridCols, gap: 5, marginBottom: 5 }}>
           <div style={{ background: "#CC1122", border: "3px solid #FFD700", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "3px 3px 0px rgba(0,0,0,0.4)", padding: "6px" }}>
-            {cornerPhrase && <div style={{ fontSize: 8, color: "#ffffff", fontWeight: 400, textAlign: "center", lineHeight: 1.4, fontFamily: "'Arial', sans-serif", whiteSpace: "pre-line" }}>{cornerPhrase}</div>}
+            {cornerPhrase && <div style={{ fontSize: 11, color: "#FFD700", fontStyle: "italic", fontWeight: 400, textAlign: "center", lineHeight: 1.5, fontFamily: "Georgia, serif", whiteSpace: "pre-line" }}>"{cornerPhrase}"</div>}
           </div>
           {columns.map((col, ci) => (
             <div key={ci} style={{ background: "#1B2A6B", borderRadius: 8, padding: "10px 4px", textAlign: "center", minHeight: 58, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", border: "3px solid #FFD700", boxShadow: "3px 3px 0px rgba(0,0,0,0.4)" }}>
