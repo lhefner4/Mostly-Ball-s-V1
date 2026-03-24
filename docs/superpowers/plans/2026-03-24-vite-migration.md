@@ -782,6 +782,7 @@ import Grid from './components/Grid.jsx'
 import ResultsScreen from './components/ResultsScreen.jsx'
 import NicknameModal from './components/NicknameModal.jsx'
 import SiteNoticeModal from './components/SiteNoticeModal.jsx'
+import LeaderboardPanel from './components/LeaderboardPanel.jsx'
 
 const TOTAL_TILES = 16
 const GAME_URL = "https://lhefner4.github.io/Mostly-Ball-s-V1/"
@@ -824,7 +825,7 @@ export default function App() {
   const [showNotice, setShowNotice] = useState(typeof SITE_NOTICE === 'string' && SITE_NOTICE.length > 0)
   const [refreshKey, setRefreshKey] = useState(0)
   const [showLeaderboard, setShowLeaderboard] = useState(false)
-  const { entries, totalCount, loading: lbLoading, error: lbError } = useLeaderboard(today, token, refreshKey)
+  const { entries, totalCount, playerRank, loading: lbLoading, error: lbError } = useLeaderboard(today, token, refreshKey)
   const inputRef = useRef(null)
   const dropdownRef = useRef(null)
 
@@ -975,6 +976,12 @@ export default function App() {
         onCancel={() => { setActive(null); setFeedback(null) }}
         revealMap={revealMap} cornerPhrase={cornerPhrase}
       />
+      {showLeaderboard && (
+        <LeaderboardPanel
+          entries={entries} totalCount={totalCount} loading={lbLoading} error={lbError}
+          token={token} onClose={() => setShowLeaderboard(false)}
+        />
+      )}
       {showEndGame && (
         <ResultsScreen
           correct={correct} totalTiles={TOTAL_TILES} totalPlayed={totalPlayed}
@@ -1076,7 +1083,7 @@ jobs:
 Check if `.gitignore` already excludes `node_modules/` and `dist/`. If not, add them:
 
 ```bash
-cd "/home/lucasmhefner/MOSTLY BALL" && echo "node_modules/\ndist/" >> .gitignore
+cd "/home/lucasmhefner/MOSTLY BALL" && printf "node_modules/\ndist/\n" >> .gitignore
 ```
 
 - [ ] **Step 3: Commit the workflow file**
