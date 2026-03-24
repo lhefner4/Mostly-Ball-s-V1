@@ -61,18 +61,19 @@ export default function ResultsScreen({
                 const isCorrect  = cell?.status === "correct"
                 const isWrong    = cell?.status === "wrong"
                 const isEmpty    = (answerPool[k] || []).length === 0
-                const revealAns  = revealMap ? revealMap[k] : null
-                const showReveal = !!revealMap && !isCorrect && !!revealAns
+                const revealList = revealMap ? (revealMap[k] || null) : null
+                const showReveal = !!revealList
                 let bg = "#0d1833", bd = "#243050"
                 if (isCorrect)       { bg = "#145a2e"; bd = "#22c55e" }
                 else if (showReveal) { bg = "#2a1a00"; bd = "#FFD700" }
                 else if (isWrong)    { bg = "#5a0a0a"; bd = "#dc2626" }
                 return (
                   <div key={ci} style={{ background: bg, border: `2px solid ${bd}`, borderRadius: 6, minHeight: 54, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 4, textAlign: "center", transition: "all 0.25s" }}>
-                    {isCorrect && <div style={{ fontSize: 8.5, fontWeight: 700, color: "#4ade80", lineHeight: 1.2, fontFamily: "'Arial', sans-serif" }}>{cell.name}</div>}
-                    {!isCorrect && showReveal && <div style={{ fontSize: 8.5, fontWeight: 700, color: "#FFD700", lineHeight: 1.2, fontFamily: "'Arial', sans-serif" }}>{revealAns}</div>}
-                    {!isCorrect && !showReveal && isWrong && <div style={{ fontSize: 9, color: "#f87171", fontWeight: 700, fontFamily: "'Arial', sans-serif" }}>X</div>}
-                    {!isCorrect && !showReveal && !isWrong && (
+                    {showReveal && revealList.map((name, idx) => (
+                      <div key={idx} style={{ fontSize: 8, fontWeight: idx === 0 && isCorrect ? 700 : 600, color: idx === 0 && isCorrect ? "#4ade80" : "#FFD700", lineHeight: 1.5, fontFamily: "'Arial', sans-serif", width: "100%" }}>{name}</div>
+                    ))}
+                    {!showReveal && isWrong && <div style={{ fontSize: 9, color: "#f87171", fontWeight: 700, fontFamily: "'Arial', sans-serif" }}>X</div>}
+                    {!showReveal && !isWrong && (
                       <div style={{ fontSize: 9, color: isEmpty ? "#333" : "#4a6aaf", fontWeight: 700, fontFamily: "'Arial', sans-serif" }}>{isEmpty ? "N/A" : "—"}</div>
                     )}
                   </div>
@@ -90,7 +91,7 @@ export default function ResultsScreen({
         )}
         {revealMap && (
           <div style={{ fontSize: 10, color: "rgba(255,215,0,0.55)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10, fontFamily: "'Arial', sans-serif" }}>
-            Correct answers revealed — no repeats
+            All correct answers revealed
           </div>
         )}
 
