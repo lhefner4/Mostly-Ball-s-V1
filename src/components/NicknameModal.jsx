@@ -15,10 +15,10 @@ export default function NicknameModal({ modalInput, setModalInput, modalError, o
             {' '}— a daily trivia game for real ball knowers. Each week brings a new theme built around what's happening in sports right now.
           </div>
           <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', fontFamily: "'Arial', sans-serif", marginBottom: 6, letterSpacing: '0.5px' }}>
-            Enter a nickname to join the leaderboard and track your scores
+            Join the leaderboard & track your stats
           </div>
           <input
-            type="text" maxLength={20} placeholder="Enter a nickname to join"
+            type="text" maxLength={20} placeholder="Your nickname"
             value={modalInput}
             onChange={(e) => setModalInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter') onSubmit() }}
