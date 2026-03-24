@@ -15,7 +15,7 @@ import SiteNoticeModal from './components/SiteNoticeModal.jsx'
 import LeaderboardPanel from './components/LeaderboardPanel.jsx'
 
 const TOTAL_TILES = 16
-const GAME_URL = "https://lhefner4.github.io/Mostly-Ball-s-V1/"
+const GAME_URL = "https://heflab.github.io/HefLab/"
 
 const { puzzle, today, columns, rows, answerPool, weekBadge, gridLabel, cornerPhrase } =
   loadPuzzle(PUZZLES, ACTIVE_OVERRIDE)
