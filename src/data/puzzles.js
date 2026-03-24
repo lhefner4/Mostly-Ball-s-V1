@@ -78,6 +78,7 @@ export const PUZZLES = {
   "2026-03-24": {
     weekBadge: "WEEK 1: THIS IS MARCH",
     gridLabel: "GRID #3: THIRD TIME'S THE CHARM",
+    cornerPhrase: "Don't look, Don't flee, Just shoot the three.",
     columns: [
       { name: "Florida",  nickname: "Gators",     color: "#003087", border: "#1a5cb5" },
       { name: "Michigan", nickname: "Wolverines", color: "#00274C", border: "#1a4a7f" },
@@ -85,10 +86,10 @@ export const PUZZLES = {
       { name: "UCLA",     nickname: "Bruins",     color: "#2774AE", border: "#4a9fd4" },
     ],
     rows: [
-      { name: "Deep Look, For Three", desc: "Led team in 3-point attempts during a Tournament run" },
-      { name: "Top 3 Ball",           desc: "Was a top-3 overall NBA Draft pick after playing here" },
-      { name: "3 Guard",              desc: "Was a starting guard during a Tournament run" },
-      { name: "Big 3",                desc: "Went on to play in the NBA on the same team as LeBron, Wade, or Bosh" },
+      { name: "DEEP 3 BALL",  desc: "Led team in 3-point attempts during a Tournament run" },
+      { name: "Top 3 Ball",   desc: "Was a top-3 overall NBA Draft pick after playing here" },
+      { name: "3 Guard Ball", desc: "Starting 3 guard during a tournament run" },
+      { name: "BIG 3 BALL",   desc: "Went on to play with a member of the Miami Heat Big 3 in the NBA" },
     ],
     answerPool: {
       "0-0": ["Lee Humphrey","Walter Clayton Jr.","Taurean Green"],
