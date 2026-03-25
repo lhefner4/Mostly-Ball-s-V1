@@ -54,23 +54,18 @@ describe('useYesterdaysLegend', () => {
   })
 
   it('returns legend with gridLabel undefined when yesterday is not in puzzles', async () => {
-    vi.useRealTimers()
-    try {
-      makeMockQuery([{ player_name: 'HoopDreams', correct: 16 }])
+    makeMockQuery([{ player_name: 'HoopDreams', correct: 16 }])
 
-      const { result } = renderHook(() => useYesterdaysLegend({}))
+    const emptyPuzzles = {}
+    const { result } = renderHook(() => useYesterdaysLegend(emptyPuzzles))
 
-      await waitFor(() => expect(result.current.loading).toBe(false))
+    await waitFor(() => expect(result.current.loading).toBe(false))
 
-      expect(result.current.legend).toEqual({
-        player_name: 'HoopDreams',
-        correct: 16,
-        gridLabel: undefined,
-      })
-    } finally {
-      vi.useFakeTimers()
-      vi.setSystemTime(new Date('2026-03-25T12:00:00Z'))
-    }
+    expect(result.current.legend).toEqual({
+      player_name: 'HoopDreams',
+      correct: 16,
+      gridLabel: undefined,
+    })
   })
 
   it('returns legend as null when no scores exist for yesterday', async () => {
