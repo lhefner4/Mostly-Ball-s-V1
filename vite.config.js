@@ -3,5 +3,10 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/HefLab/'
+  base: '/HefLab/',
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: './src/test-setup.js',
+  },
 })
