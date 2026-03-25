@@ -42,21 +42,24 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 
 File: `src/hooks/useYesterdaysLegend.js`
 
-Queries the `scores` table for `puzzle_date = yesterday`, ordered `correct DESC, submitted_at ASC`, limit 1. The puzzle's `gridLabel` is derived client-side by looking up yesterday's date string in the `puzzles` object passed as a parameter.
+Queries the `scores` table for `puzzle_date = yesterday`, ordered `correct DESC, submitted_at ASC`, limit 1. The puzzle's `gridLabel` is derived client-side by looking up yesterday's date string in the `puzzles` object.
 
-Returns:
+**Important:** `puzzles` is a required parameter — it must be passed in from the caller (e.g., `useYesterdaysLegend(PUZZLES)` in `App.jsx`). The hook must NOT import `PUZZLES` internally. This keeps the hook independently testable and its interface explicit.
+
+Returns three sibling top-level values:
 ```js
+// Top-level return shape — error and loading are siblings of legend, not fields on it
 {
-  legend: { player_name, correct, gridLabel } | null,
-  loading,
-  error
+  legend,   // { player_name, correct, gridLabel } | null
+  loading,  // boolean
+  error     // boolean
 }
 ```
 
 - `legend`: winner object, or `null` if no scores exist for yesterday
-- `gridLabel`: the puzzle's label string (e.g., "GRID #3: THREE POINT LAND"), or `undefined` if yesterday's date is not in the `puzzles` object
-- `loading`: boolean
-- `error`: boolean — if `true`, banner is hidden entirely
+  - `gridLabel`: the puzzle's label string (e.g., "GRID #3: THREE POINT LAND"), or `undefined` if yesterday's date is not in the `puzzles` parameter
+- `loading`: boolean — `true` while fetching
+- `error`: boolean — `true` if the fetch failed; when `true`, banner is hidden entirely
 
 ### SQL Migration
 
@@ -101,6 +104,8 @@ A banner is rendered at the very top of the panel, before the "Today's Leaderboa
 
 **Styling:** Navy background, gold border accent, same font family as the rest of the panel. Banner separated from the today's leaderboard section by a divider.
 
+**Accessibility:** The dialog element's `aria-label` must be updated from `"Today's leaderboard"` to `"Leaderboard"` to reflect that the panel now contains two sections.
+
 ### `App.jsx`
 
 - Calls `useYesterdaysLegend(PUZZLES)` alongside the existing `useLeaderboard` call
@@ -129,7 +134,8 @@ A banner is rendered at the very top of the panel, before the "Today's Leaderboa
 | `src/components/LeaderboardPanel.jsx` | Add `legend` prop and banner rendering |
 | `src/App.jsx` | Call `useYesterdaysLegend`, pass `legend` to `LeaderboardPanel` |
 | `.env.example` | New committed file — documents required env vars |
-| `.env` | New uncommitted file — local credentials (added to `.gitignore`) |
+| `.env` | New uncommitted file — local credentials |
+| `.gitignore` | Add `.env` entry to prevent credentials from being committed |
 
 **Nothing else in the game is modified.** No core game logic, no scoring system, no existing state beyond additions above.
 
@@ -144,7 +150,8 @@ A banner is rendered at the very top of the panel, before the "Today's Leaderboa
 - [ ] If the fetch fails, the banner is hidden entirely — no error shown
 - [ ] Tie-breaking uses earliest `submitted_at`
 - [ ] Supabase credentials read from `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` env vars
-- [ ] `.env.example` committed; `.env` not committed
+- [ ] `.env.example` committed; `.env` not committed and listed in `.gitignore`
+- [ ] Dialog `aria-label` updated to `"Leaderboard"`
 - [ ] No existing leaderboard or game functionality is broken
 
 ---
