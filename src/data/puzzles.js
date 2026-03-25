@@ -113,6 +113,7 @@ export const PUZZLES = {
   "2026-03-25": {
     weekBadge: "WEEK 1: THIS IS MARCH",
     gridLabel: "GRID #4: FOUR BALLERS EVERYWHERE",
+    cornerPhrase: "You think you know ball, but are your 4 sure?",
     columns: [
       { name: "Marquette", nickname: "Golden Eagles", color: "#003366", border: "#FFCC00" },
       { name: "Oklahoma",  nickname: "Sooners",       color: "#841617", border: "#B5282A" },
