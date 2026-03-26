@@ -2,7 +2,7 @@
 // To add a new day: add a new "YYYY-MM-DD" entry and push to GitHub.
 // weekBadge: plain text, ~30 chars max. gridLabel: plain text, ~35 chars max.
 // ACTIVE_OVERRIDE: set to a "YYYY-MM-DD" string to force that puzzle live for everyone. Set to null to resume normal date-based loading.
-const ACTIVE_OVERRIDE = "2026-03-23";
+const ACTIVE_OVERRIDE = "2026-03-26";
 const SITE_NOTICE = "Warning: This is an active prototype. Log-in, Sign-up and Leaderboard features are currently disabled. -THANKS FOR TESTING!";
 const PUZZLES = {
   "2026-03-22": {
@@ -73,6 +73,41 @@ const PUZZLES = {
       "3-1": ["Wilt Chamberlain","Clyde Lovellette","Danny Manning","Nick Collison","Raef LaFrentz","Cole Aldrich","Thomas Robinson","Joel Embiid","Udoka Azubuike","David McCormack","Markieff Morris","Dedric Lawson","Hunter Dickinson","Scot Pollard"],
       "3-2": ["Goran Suton","Draymond Green","Branden Dawson","Andre Hutson","Paul Davis","Xavier Tillman","Morris Peterson","Antonio Smith"],
       "3-3": ["Don Schlundt","Archie Dees","Kent Benson","Ray Tolbert","Dean Garrett","Jared Jeffries","Alan Henderson","Cody Zeller"],
+    },
+  },
+  "2026-03-26": {
+    weekBadge: "WEEK 1: THIS IS MARCH",
+    gridLabel: "GRID #3: BALLERS FINAL MARCH",
+    cornerPhrase: "Third Eye Ballin'.\nYou Already Know The Game.",
+    columns: [
+      { name: "UCLA",       nickname: "Bruins",       color: "#003B5C", border: "#2D68C4" },
+      { name: "Arizona",    nickname: "Wildcats",     color: "#CC0033", border: "#e63358" },
+      { name: "Georgetown", nickname: "Hoyas",        color: "#041E42", border: "#1a4080" },
+      { name: "Purdue",     nickname: "Boilermakers", color: "#1a1a1a", border: "#CEB888" },
+    ],
+    rows: [
+      { name: "Crystal Ball",  desc: "Was a McDonald's All-American recruit" },
+      { name: "Ball Hawk",     desc: "Led team in assists during a Tournament run" },
+      { name: "Ball Gown",     desc: "Had their jersey number retired by this school" },
+      { name: "Odd Ball",      desc: "Transferred to this school before their best season" },
+    ],
+    answerPool: {
+      "0-0": ["Kiki Vandeweghe","Baron Davis","Jason Kapono","Jordan Farmar","Arron Afflalo","Kevin Love","Russell Westbrook","Jrue Holiday","Shabazz Muhammad","Kyle Anderson","Zach LaVine","Kevon Looney","Lonzo Ball","T.J. Leaf","Ike Anigbogu","Kris Wilkes","Moses Brown","Amari Bailey","Adem Bona"],
+      "0-1": ["Walt Hazzard","Lucius Allen","Henry Bibby","Pooh Richardson","Toby Bailey","Cameron Dollar","Jordan Farmar","Darren Collison","Jrue Holiday","Tyger Campbell"],
+      "0-2": ["Kareem Abdul-Jabbar","Bill Walton","Jamaal Wilkes","Marques Johnson","Don MacLean","Reggie Miller","Baron Davis","Ed O'Bannon"],
+      "0-3": ["Johnny Juzang","Tyger Campbell","David Singleton","Adem Bona"],
+      "1-0": ["Mike Bibby","Jason Terry","Derrick Williams","Aaron Gordon","Stanley Johnson","Allonzo Trier","DeAndre Ayton","Nico Mannion","Josh Green","Kylan Boswell","Jaden Bradley"],
+      "1-1": ["Steve Kerr","Khalid Reeves","Mike Bibby","Jason Gardner","Kerr Kriisa"],
+      "1-2": ["Sean Elliott","Damon Stoudamire","Steve Kerr","Mike Bibby"],
+      "1-3": ["Kerr Kriisa","Pelle Larsson","Oumar Ballo","Keshad Johnson","Caleb Love","KJ Simpson"],
+      "2-0": ["Patrick Ewing","Alonzo Mourning","Allen Iverson","Jeff Green","Roy Hibbert","DaJuan Summers","Austin Freeman","Jason Clark","Greg Monroe","Chris Wright","Otto Porter Jr.","Omer Yurtseven"],
+      "2-1": ["Fred Brown","Michael Jackson","Allen Iverson","D'Vauntes Smith-Rivera"],
+      "2-2": ["Patrick Ewing","Allen Iverson","Alonzo Mourning","Dikembe Mutombo","Eric Floyd"],
+      "2-3": ["Mac McClung","Qudus Wahab","Aminu Mohammed","Kamar Baldwin"],
+      "3-0": ["Glenn Robinson","Caleb Swanigan","JaJuan Johnson","E'Twaun Moore","Robbie Hummel"],
+      "3-1": ["Braden Smith","Jaden Ivey","Nojel Eastern","Lewis Jackson","Bruce Parkinson","Chris Kramer"],
+      "3-2": ["Terry Dischinger","Dave Schellhase","Rick Mount","Joe Barry Carroll","Glenn Robinson"],
+      "3-3": ["Lance Jones","David Jenkins Jr.","Trey Kaufman-Renn"],
     },
   },
 };
