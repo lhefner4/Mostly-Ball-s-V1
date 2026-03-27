@@ -2,7 +2,7 @@
 // To add a new day: add a new "YYYY-MM-DD" entry and push to GitHub.
 // weekBadge: plain text, ~30 chars max. gridLabel: plain text, ~35 chars max.
 // ACTIVE_OVERRIDE: set to a "YYYY-MM-DD" string to force that puzzle live for everyone. Set to null to resume normal date-based loading.
-export const ACTIVE_OVERRIDE = "2026-03-26";
+export const ACTIVE_OVERRIDE = "2026-03-27";
 export const SITE_NOTICE = "NEW: Leaderboard is now live!\n\nYour first submission is final. Here's what counts:\n\n• Complete all 16 tiles or press \"End Game\" to submit your score.\n• Replaying or resetting after submitting will NOT change your rank.\n• Pressing \"End Game\" early locks your score at that point.\n• One score per player, per puzzle — only the first counts.\n\nGood luck — you only get one shot!";
 export const PUZZLES = {
   "2026-03-22": {
@@ -178,6 +178,41 @@ export const PUZZLES = {
       "3-1": ["Braden Smith","Jaden Ivey","Nojel Eastern","Lewis Jackson","Bruce Parkinson","Chris Kramer"],
       "3-2": ["Terry Dischinger","Dave Schellhase","Rick Mount","Joe Barry Carroll","Glenn Robinson"],
       "3-3": ["Lance Jones","David Jenkins Jr.","Trey Kaufman-Renn"],
+    },
+  },
+  "2026-03-27": {
+    weekBadge: "WEEK 1: THIS IS MARCH",
+    gridLabel: "GRID #6: STEP UP TO THE PLATE BALLERS",
+    cornerPhrase: "First pitch. First test.\nDo you know your roster?",
+    columns: [
+      { name: "Offseason Trade",  nickname: "New Arrival",  color: "#CC6600", border: "#e68a00" },
+      { name: "Bats 1–3",        nickname: "Top of Order", color: "#2d6a4f", border: "#52b788" },
+      { name: "Division HR King", nickname: "Long Ball",    color: "#CC0000", border: "#e63333" },
+      { name: "Team Veteran",     nickname: "5+ Seasons",   color: "#00275B", border: "#1a4fa8" },
+    ],
+    rows: [
+      { name: "AL East",    desc: "Baltimore Orioles, Boston Red Sox, New York Yankees, Tampa Bay Rays, or Toronto Blue Jays" },
+      { name: "AL Central", desc: "Chicago White Sox, Cleveland Guardians, Detroit Tigers, Kansas City Royals, or Minnesota Twins" },
+      { name: "NL East",    desc: "Atlanta Braves, Miami Marlins, New York Mets, Philadelphia Phillies, or Washington Nationals" },
+      { name: "NL West",    desc: "Arizona Diamondbacks, Colorado Rockies, Los Angeles Dodgers, San Diego Padres, or San Francisco Giants" },
+    ],
+    answerPool: {
+      "0-0": ["Pete Alonso","Taylor Ward","Willson Contreras","Caleb Durbin","Kazuma Okamoto"],
+      "0-1": ["Gunnar Henderson","Adley Rutschman","Pete Alonso","Roman Anthony","Trevor Story","Jarren Duran","Trent Grisham","Aaron Judge","Cody Bellinger","Yandy Díaz","Jonathan Aranda","Junior Caminero","George Springer","Daulton Varsho","Vladimir Guerrero Jr."],
+      "0-2": ["Aaron Judge"],
+      "0-3": ["Aaron Judge"],
+      "1-0": [],
+      "1-1": ["Chase Meidroth","Austin Hays","Colson Montgomery","Steven Kwan","Chase DeLauter","José Ramírez","Gleyber Torres","Matt Vierling","Riley Greene","Maikel Garcia","Bobby Witt Jr.","Vinnie Pasquantino","Luke Keaschall","Byron Buxton","Matt Wallner"],
+      "1-2": ["José Ramírez"],
+      "1-3": ["Salvador Perez","José Ramírez","Byron Buxton","Christian Yelich"],
+      "2-0": ["Bo Bichette","Marcus Semien"],
+      "2-1": ["Ronald Acuña Jr.","Drake Baldwin","Matt Olson","Jakob Marsee","Otto Lopez","Christopher Morel","Francisco Lindor","Juan Soto","Bo Bichette","Trea Turner","Kyle Schwarber","Bryce Harper","CJ Abrams","Jacob Young","James Wood"],
+      "2-2": ["Juan Soto"],
+      "2-3": ["Bryce Harper"],
+      "3-0": ["Kyle Tucker","Nolan Arenado","TJ Rumfield"],
+      "3-1": ["Geraldo Perdomo","Ketel Marte","Corbin Carroll","Jake McCarthy","Willi Castro","Hunter Goodman","Shohei Ohtani","Kyle Tucker","Mookie Betts","Xander Bogaerts","Jackson Merrill","Manny Machado","Luis Arraez","Matt Chapman","Rafael Devers"],
+      "3-2": ["Kyle Tucker"],
+      "3-3": ["Miguel Rojas"],
     },
   },
 };
