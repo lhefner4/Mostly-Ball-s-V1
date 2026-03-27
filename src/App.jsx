@@ -218,8 +218,8 @@ export default function App() {
       <div style={{ background: "#CC1122", height: 3 }} />
       <div style={{ height: 8, background: "linear-gradient(to bottom, rgba(10,15,35,0.35), transparent)" }} />
       {/* Opening Day eligibility notice */}
-      <div style={{ textAlign: "center", padding: "2px 10px 6px", fontSize: 9, color: "rgba(255,215,0,0.88)", letterSpacing: 0, fontFamily: "'Arial', sans-serif", fontStyle: "italic", fontWeight: 700, whiteSpace: "nowrap" }}>
-        *** To qualify as a correct answer, player MUST be in the starting lineup for their team on Opening Day ***
+      <div style={{ textAlign: "center", padding: "2px 14px 6px", fontSize: 9, color: "rgba(255,215,0,0.88)", letterSpacing: 0, fontFamily: "'Arial', sans-serif", fontStyle: "italic", fontWeight: 700, lineHeight: 1.6, overflow: "hidden" }}>
+        *** To qualify as a correct answer, the player MUST be<br />in the starting lineup for their team on Opening Day ***
       </div>
       <Grid
         columns={columns} rows={rows} answerPool={answerPool}
