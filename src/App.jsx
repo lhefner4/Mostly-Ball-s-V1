@@ -194,6 +194,8 @@ export default function App() {
         modalError={modalError}
         onSubmit={handleModalSubmit}
         fontFamily={bgStyle.fontFamily}
+        weekBadge={weekBadge}
+        gridLabel={gridLabel}
       />
     )
   }
