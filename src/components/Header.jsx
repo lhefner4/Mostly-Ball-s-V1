@@ -1,13 +1,10 @@
 import { navBtn } from '../utils/validate.js'
-import NicknamePopover from './NicknamePopover.jsx'
 
 export default function Header({
   weekBadge, gridLabel, rows,
   correct, incorrect, totalPlayed, totalTiles,
   showRules, onToggleRules,
-  onEndGame, onReset,
-  nickname, showPopover, popoverInput, setPopoverInput, popoverError, onPopoverToggle, onPopoverSave,
-  onShowLeaderboard
+  onReset,
 }) {
   return (
     <>
@@ -23,14 +20,6 @@ export default function Header({
         <div style={{ display: "inline-block", background: "#CC1122", color: "#fff", fontSize: "clamp(11px,2.8vw,16px)", fontWeight: 900, letterSpacing: 3, textTransform: "uppercase", padding: "5px 20px", borderRadius: 3, marginTop: 10, marginBottom: 14, border: "2px solid #FFD700", textShadow: "-1px -1px 0 #1B2A6B, 1px -1px 0 #1B2A6B, -1px 1px 0 #1B2A6B, 1px 1px 0 #1B2A6B", boxShadow: "3px 3px 0px rgba(0,0,0,0.3)" }}>
           {gridLabel}
         </div>
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, marginBottom: 14, flexWrap: "wrap" }}>
-          <NicknamePopover
-            nickname={nickname} show={showPopover}
-            input={popoverInput} setInput={setPopoverInput} error={popoverError}
-            onToggle={onPopoverToggle} onSave={onPopoverSave}
-          />
-          <button onClick={onShowLeaderboard} style={navBtn("#1B2A6B", "#FFD700")}>🏆 Leaderboard</button>
-        </div>
         <div style={{ display: "flex", justifyContent: "center", alignItems: "stretch", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>
           {[
             { val: correct,                  label: "CORRECT",   bg: "#145a2e", bd: "#22c55e", vc: "#4ade80", lc: "#86efac" },
@@ -45,7 +34,6 @@ export default function Header({
         </div>
         <div style={{ display: "flex", justifyContent: "center", gap: 8 }}>
           <button onClick={onToggleRules} style={navBtn("#1B2A6B", "#FFD700")}>{showRules ? "Hide Rules" : "How to Play"}</button>
-          {totalPlayed > 0 && totalPlayed < totalTiles && <button onClick={onEndGame} style={navBtn("#5a0a0a", "#f87171")}>End Game</button>}
           <button onClick={onReset} style={navBtn("#5a0a0a", "#f87171")}>Reset</button>
         </div>
       </div>

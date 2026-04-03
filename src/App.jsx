@@ -1,22 +1,12 @@
 import { useState, useRef, useEffect } from 'react'
 import PLAYER_DB from './data/players.js'
-import { PUZZLES, ACTIVE_OVERRIDE, SITE_NOTICE } from './data/puzzles.js'
+import { PUZZLES, ACTIVE_OVERRIDE } from './data/puzzles.js'
 import { loadPuzzle } from './utils/puzzle.js'
-import { validate, nc, buildRevealMap, getVerdict, navBtn } from './utils/validate.js'
-import { validateNickname } from './utils/validate.js'
-import { submitScore } from './utils/supabase.js'
-import { usePlayerIdentity } from './hooks/usePlayerIdentity.js'
-import { useLeaderboard } from './hooks/useLeaderboard.js'
-import { useYesterdaysLegend } from './hooks/useYesterdaysLegend.js'
+import { validate, nc } from './utils/validate.js'
 import Header from './components/Header.jsx'
 import Grid from './components/Grid.jsx'
-import ResultsScreen from './components/ResultsScreen.jsx'
-import NicknameModal from './components/NicknameModal.jsx'
-import SiteNoticeModal from './components/SiteNoticeModal.jsx'
-import LeaderboardPanel from './components/LeaderboardPanel.jsx'
 
 const TOTAL_TILES = 16
-const GAME_URL = "https://heflab.github.io/HefLab/"
 
 const { puzzle, today, columns, rows, answerPool, weekBadge, gridLabel, cornerPhrase } =
   loadPuzzle(PUZZLES, ACTIVE_OVERRIDE)
@@ -35,42 +25,21 @@ const bgStyle = {
 }
 
 export default function App() {
-  const { token, nickname, showModal, saveNickname } = usePlayerIdentity()
-  const [showPopover, setShowPopover] = useState(false)
-  const [modalInput, setModalInput] = useState('')
-  const [modalError, setModalError] = useState('')
-  const [popoverInput, setPopoverInput] = useState('')
-  const [popoverError, setPopoverError] = useState('')
   const [cells, setCells] = useState({})
   const [used, setUsed] = useState(new Set())
   const [active, setActive] = useState(null)
   const [inputVal, setInputVal] = useState("")
   const [feedback, setFeedback] = useState(null)
   const [showRules, setShowRules] = useState(false)
-  const [showEndGame, setShowEndGame] = useState(false)
-  const [revealMap, setRevealMap] = useState(null)
-  const [copyToast, setCopyToast] = useState(false)
   const [suggestions, setSuggestions] = useState([])
   const [suggIdx, setSuggIdx] = useState(-1)
   const [acOpen, setAcOpen] = useState(false)
-  const [showNotice, setShowNotice] = useState(typeof SITE_NOTICE === 'string' && SITE_NOTICE.length > 0)
-  const [refreshKey, setRefreshKey] = useState(0)
-  const [showLeaderboard, setShowLeaderboard] = useState(false)
-  const { entries, totalCount, playerRank, loading: lbLoading, error: lbError } = useLeaderboard(today, token, refreshKey)
-  const { legend, loading: legendLoading, error: legendError } = useYesterdaysLegend(PUZZLES)
   const inputRef = useRef(null)
   const dropdownRef = useRef(null)
 
   const correct   = Object.values(cells).filter(c => c?.status === "correct").length
   const incorrect = Object.values(cells).filter(c => c?.status === "wrong").length
   const totalPlayed = correct + incorrect
-
-  useEffect(() => {
-    if (totalPlayed === TOTAL_TILES) {
-      submitScore(token, nickname, correct, today).then(() => setRefreshKey(k => k + 1))
-      setTimeout(() => setShowEndGame(true), 600)
-    }
-  }, [totalPlayed])
 
   useEffect(() => { if (active) setTimeout(() => inputRef.current?.focus(), 60) }, [active])
 
@@ -80,20 +49,6 @@ export default function App() {
       if (el) el.scrollIntoView({ block: "nearest", behavior: "smooth" })
     }
   }, [suggIdx])
-
-  useEffect(() => {
-    if (!showNotice) return
-    const onKey = (e) => { if (e.key === 'Escape') setShowNotice(false) }
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [showNotice])
-
-  useEffect(() => {
-    if (!showLeaderboard) return
-    const onKey = (e) => { if (e.key === 'Escape') setShowLeaderboard(false) }
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [showLeaderboard])
 
   // --- Handlers ---
   const openCell = (r, c) => {
@@ -122,32 +77,7 @@ export default function App() {
 
   const reset = () => {
     setCells({}); setUsed(new Set()); setActive(null); setInputVal(""); setFeedback(null)
-    setShowRules(false); setShowEndGame(false); setRevealMap(null); setCopyToast(false)
-    setSuggestions([]); setSuggIdx(-1); setAcOpen(false)
-  }
-
-  const handleReveal = () => setRevealMap(buildRevealMap(cells, answerPool, rows, columns))
-
-  const handleCopyResults = () => {
-    const pctVal = Math.round((correct / TOTAL_TILES) * 100)
-    const base = `${gridLabel}\nI shot ${correct} / ${TOTAL_TILES} (${pctVal}% Correct) — Balls in your court now!\n\n${GAME_URL}`
-    const msg = nickname ? `${nickname} — ${base}` : base
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(msg).catch(() => { const ta = document.createElement('textarea'); ta.value = msg; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta) })
-    } else { const ta = document.createElement('textarea'); ta.value = msg; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta) }
-    setCopyToast(true); setTimeout(() => setCopyToast(false), 2200)
-  }
-
-  const handleModalSubmit = () => {
-    const val = modalInput.trim()
-    if (!validateNickname(val)) { setModalError('2–20 characters. Letters, numbers, _ and - only.'); return }
-    setModalError(''); saveNickname(val)
-  }
-
-  const handlePopoverSave = () => {
-    const val = popoverInput.trim()
-    if (!validateNickname(val)) { setPopoverError('2–20 characters. Letters, numbers, _ and - only.'); return }
-    saveNickname(val); setShowPopover(false); setPopoverError('')
+    setShowRules(false); setSuggestions([]); setSuggIdx(-1); setAcOpen(false)
   }
 
   const handleInputChange = (e) => {
@@ -177,41 +107,15 @@ export default function App() {
     }
   }
 
-  const verdict = getVerdict(correct)
-  const pct     = Math.round((correct / TOTAL_TILES) * 100)
-  const hasRevealable = incorrect > 0 || (TOTAL_TILES - totalPlayed) > 0
-
   if (!puzzle) return <div style={{ color: '#fff', textAlign: 'center', padding: 40, fontFamily: 'sans-serif', fontSize: 20 }}>Game unavailable — check back soon.</div>
-
-  if (showModal) {
-    return (
-      <NicknameModal
-        modalInput={modalInput}
-        setModalInput={setModalInput}
-        modalError={modalError}
-        onSubmit={handleModalSubmit}
-        fontFamily={bgStyle.fontFamily}
-        weekBadge={weekBadge}
-        gridLabel={gridLabel}
-      />
-    )
-  }
 
   return (
     <div style={bgStyle}>
-      {showNotice && <SiteNoticeModal notice={SITE_NOTICE} onClose={() => setShowNotice(false)} />}
       <Header
         weekBadge={weekBadge} gridLabel={gridLabel} rows={rows}
         correct={correct} incorrect={incorrect} totalPlayed={totalPlayed} totalTiles={TOTAL_TILES}
         showRules={showRules} onToggleRules={() => setShowRules(p => !p)}
-        onEndGame={() => { submitScore(token, nickname, correct, today).then(() => setRefreshKey(k => k + 1)); setShowEndGame(true) }}
         onReset={reset}
-        nickname={nickname}
-        showPopover={showPopover} popoverInput={popoverInput} setPopoverInput={setPopoverInput}
-        popoverError={popoverError}
-        onPopoverToggle={(val) => { if (val === false) { setShowPopover(false); return } setShowPopover(p => !p); setPopoverInput(nickname); setPopoverError('') }}
-        onPopoverSave={handlePopoverSave}
-        onShowLeaderboard={() => setShowLeaderboard(true)}
       />
       <div style={{ height: 22, background: "linear-gradient(to bottom, #1B2A6B, #7a0a00)", width: "100%" }} />
       <Grid
@@ -223,33 +127,8 @@ export default function App() {
         onSuggestionSelect={handleSuggestionSelect}
         onSubmit={submit} onKeyDown={handleKeyDown}
         onCancel={() => { setActive(null); setFeedback(null) }}
-        revealMap={revealMap} cornerPhrase={cornerPhrase}
+        revealMap={null} cornerPhrase={cornerPhrase}
       />
-      {showLeaderboard && (
-        <LeaderboardPanel
-          entries={entries}
-          totalCount={totalCount}
-          loading={lbLoading}
-          error={lbError}
-          token={token}
-          onClose={() => setShowLeaderboard(false)}
-          legend={legend}
-          legendLoading={legendLoading}
-          legendError={legendError}
-        />
-      )}
-      {showEndGame && (
-        <ResultsScreen
-          correct={correct} totalTiles={TOTAL_TILES} totalPlayed={totalPlayed}
-          cells={cells} columns={columns} rows={rows} answerPool={answerPool} revealMap={revealMap}
-          verdict={verdict} pct={pct} gridLabel={gridLabel} nickname={nickname}
-          copyToast={copyToast} onCopyResults={handleCopyResults} onReset={reset}
-          onKeepPlaying={() => setShowEndGame(false)}
-          hasRevealable={hasRevealable} onReveal={handleReveal}
-          entries={entries} totalCount={totalCount} token={token}
-          lbLoading={lbLoading} lbError={lbError}
-        />
-      )}
     </div>
   )
 }
